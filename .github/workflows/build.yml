@@ -1,0 +1,52 @@
+name: Compilar AutoLevelGen
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # permite lanzarlo manualmente desde GitHub
+
+jobs:
+  build:
+    name: Compilar mod (Windows)
+    runs-on: windows-latest
+
+    steps:
+      # 1. Descargar tu código
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      # 2. Instalar Geode CLI (herramienta oficial de Geode)
+      - name: Instalar Geode CLI
+        uses: geode-sdk/cli/.github/actions/install@main
+
+      # 3. Configurar Geode SDK
+      - name: Configurar Geode SDK
+        uses: geode-sdk/sdk/.github/actions/setup@main
+
+      # 4. Compilar con CMake
+      - name: Compilar mod
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --config Release
+
+      # 5. Empaquetar como .geode
+      - name: Empaquetar .geode
+        run: geode package new build/Release/AutoLevelGen.dll --output AutoLevelGen.geode
+
+      # 6. Subir el .geode como artefacto descargable
+      - name: Subir artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: AutoLevelGen-${{ github.sha }}
+          path: AutoLevelGen.geode
+          retention-days: 30
+
+      # 7. Si es un tag de versión, crear Release automático
+      - name: Crear Release (solo en tags)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: AutoLevelGen.geode
+          generate_release_notes: true

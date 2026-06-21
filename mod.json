@@ -1,0 +1,45 @@
+{
+    "geode": "4.0.0",
+    "gd": {
+        "win": "2.2074",
+        "android": "2.2074"
+    },
+    "id": "tuusuario.autolevelgen",
+    "name": "Auto Level Gen",
+    "version": "1.0.0",
+    "developer": "TuNombre",
+    "description": "Genera niveles aleatorios automáticamente con un solo botón.",
+    "links": {
+        "source": "https://github.com/tuusuario/AutoLevelGen"
+    },
+    "settings": {
+        "seed": {
+            "name": "Semilla aleatoria",
+            "description": "0 = completamente aleatorio cada vez",
+            "type": "int",
+            "default": 0
+        },
+        "level-length": {
+            "name": "Longitud del nivel",
+            "description": "Cantidad de secciones generadas",
+            "type": "int",
+            "default": 20,
+            "min": 5,
+            "max": 100
+        },
+        "difficulty": {
+            "name": "Dificultad",
+            "description": "Controla la densidad y complejidad de obstáculos",
+            "type": "string",
+            "default": "Normal",
+            "one-of": ["Fácil", "Normal", "Difícil", "Extremo"]
+        },
+        "game-mode": {
+            "name": "Modo de juego",
+            "description": "Tipo de jugador a generar",
+            "type": "string",
+            "default": "Cubo",
+            "one-of": ["Cubo", "Nave", "Bola", "UFO", "Ola", "Robot", "Araña"]
+        }
+    }
+}
